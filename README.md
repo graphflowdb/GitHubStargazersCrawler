@@ -12,3 +12,4 @@ A simple crawler to get the user profile of all stargazers of the specified GitH
 - The crawler will also automatically handle the GitHub API rate limit. If the rate limit is reached, the crawler will wait until the limit is reset and then continue the crawling process.
 - It is possible to run the crawler for multiple repositories over the same database. 
 - It is possible to run the crawler without a GitHub API token, but the rate limit is much lower.
+- The crawler will try to crawl each user only once. If an error occurs during crawling, the request will not be repeated. However, when restarting the crawler, the skipped users will be crawled again.

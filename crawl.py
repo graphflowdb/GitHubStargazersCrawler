@@ -11,7 +11,7 @@ import time
 logging.basicConfig(level=logging.INFO)
 
 GITHUB_API_PREFIX = "https://api.github.com/"
-SLEEP_TIME = 0.5
+SLEEP_TIME = 0.3
 PER_PAGE = 100
 
 
