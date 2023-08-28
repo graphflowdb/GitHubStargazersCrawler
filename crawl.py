@@ -40,11 +40,14 @@ def check_and_wait_for_rate_limit(response):
         rate_limit_reset_interval,
     )
     if remaining_rate_limit < 5:
-        logging.info(
-            "Rate limit almost reached. Waiting for reset in %d seconds...",
-            rate_limit_reset_interval,
+        wait_time = int(rate_limit_reset_interval + 10)
+        logging.debug("Rate limit almost reached. Waiting for reset...")
+        progress_bar = tqdm(
+            desc="Waiting for rate limit reset", unit=" seconds", total=wait_time
         )
-        time.sleep(rate_limit_reset_interval + 10)
+        for _ in range(wait_time):
+            time.sleep(1)
+            progress_bar.update(1)
         logging.info("Resuming")
 
 
