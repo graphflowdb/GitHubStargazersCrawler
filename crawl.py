@@ -15,7 +15,7 @@ SLEEP_TIME = 0.3
 PER_PAGE = 100
 
 
-def get_session():
+def get_session(stargazer=False):
     GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
     session = requests.Session()
     if GITHUB_TOKEN:
@@ -24,8 +24,11 @@ def get_session():
         logging.warning(
             "No GITHUB_TOKEN environment variable found. This will result in a lower rate limit."
         )
-    session.headers.update({"Accept": "application/vnd.github+json"})
-    session.headers.update({"X-GitHub-Api-Version": "2022-11-28"})
+    if stargazer:
+        session.headers.update({"Accept": "application/vnd.github.star+json"})
+    else:
+        session.headers.update({"Accept": "application/vnd.github+json"})
+        session.headers.update({"X-GitHub-Api-Version": "2022-11-28"})
     return session
 
 
@@ -95,7 +98,7 @@ def get_stargazers(repository):
             page_idx,
             PER_PAGE,
         )
-        response = session.get(url)
+        response = stargazer_session.get(url)
         time.sleep(SLEEP_TIME)
         check_and_wait_for_rate_limit(response)
         if response.status_code == 200:
@@ -144,8 +147,8 @@ def persist_repository(repository, conn):
 def persist_stargazers(stargazers, repository, conn):
     cursor = conn.cursor()
     cursor.executemany(
-        "INSERT INTO stars VALUES (?, ?)",
-        [(repository["full_name"], stargazer["login"]) for stargazer in stargazers],
+        "INSERT INTO stars VALUES (?, ?, ?)",
+        [(repository["full_name"], stargazer['user']["login"], stargazer['starred_at']) for stargazer in stargazers],
     )
     conn.commit()
     cursor.close()
@@ -229,6 +232,8 @@ def fetch_and_persist_users(stargazers, conn):
 def main():
     global session
     session = get_session()
+    global stargazer_session
+    stargazer_session = get_session(True)
     repository, db_path = parse_args()
     conn = get_db_connection(db_path)
     stargazers = get_stargazers_from_db(repository, conn)

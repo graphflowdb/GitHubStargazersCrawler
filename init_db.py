@@ -25,9 +25,10 @@ def init_db(db_path):
               """
     )
     c.execute(
-        """CREATE TABLE IF NOT EXISTS stars(repo_id TEXT, user_id TEXT, 
-              FOREIGN KEY(repo_id) REFERENCES repositories(id), 
-              PRIMARY KEY(repo_id, user_id))"""
+        """
+              CREATE TABLE IF NOT EXISTS stars(repo_id TEXT, user_id TEXT, 
+              starred_at TIMESTAMP, FOREIGN KEY(repo_id) REFERENCES 
+              repositories(id), PRIMARY KEY(repo_id, user_id))"""
     )
     c.execute(
         """
