@@ -5,7 +5,7 @@ A simple crawler to get the user profile of all stargazers of the specified GitH
 1. Install the requirements: `pip install -r requirements.txt`
 1. Create a GitHub API token and store it as an environment variable: `export GITHUB_TOKEN=<your token>`
 1. Initialize the database: `python init_db.py`
-1. Run the crawler: `python crawler.py <repository>`, for example `python crawler.py kuzudb/kuzu`
+1. Run the crawler: `python crawl.py <repository>`, for example `python crawler.py kuzudb/kuzu`
 
 ## Notes
 - If the crawler is stopped, the current state will be saved in the SQLite database. It is possible to run the crawler multiple times for the same repository. It will automatically skip already crawled users and continue from the last saved state. 
