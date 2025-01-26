@@ -11,7 +11,7 @@ import time
 logging.basicConfig(level=logging.INFO)
 
 GITHUB_API_PREFIX = "https://api.github.com/"
-SLEEP_TIME = 0.3
+SLEEP_TIME = 0
 PER_PAGE = 100
 
 
@@ -132,7 +132,7 @@ def get_user(user_id):
 def persist_repository(repository, conn):
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO repositories VALUES (?, ?, ?, ?)",
+        "INSERT OR REPLACE INTO repositories VALUES (?, ?, ?, ?)",
         (
             repository["full_name"],
             repository["stargazers_count"],
