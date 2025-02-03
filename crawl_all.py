@@ -1,7 +1,7 @@
 import sqlite3
 import sys
 from os import environ
-import os
+import subprocess
 
 db_path = "results.sqlite"
 
@@ -29,7 +29,7 @@ def crawl(repository):
         sys.exit(1)
     command = [python_executable, "crawl.py", repository, db_path]
     env = {"GITHUB_TOKEN": github_token}
-    os.execvpe(python_executable, command, env)
+    subprocess.run(command, env=env)
 
 if __name__ == "__main__":
     main()
