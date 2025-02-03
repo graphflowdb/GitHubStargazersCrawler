@@ -19,6 +19,7 @@ def main():
     print("Database cleaned, ready to start crawling...")
     for repo in repos:
         print(f"Crawling {repo}...")
+        sys.stdout.flush()
         crawl(repo)
 
 def crawl(repository):
