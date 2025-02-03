@@ -1,0 +1,51 @@
+name: Run Crawler
+
+on: 
+  workflow_dispatch:
+  workflow_call:
+
+
+jobs:
+  run-crawler:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Run Crawler
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 crawl_all.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawl-results
+          path: results.sqlite
+  
+  update-repository:
+    runs-on: ubuntu-22.04
+    needs: run-crawler
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.DOC_PUSH_TOKEN }}
+
+      - name: Remove old crawl results
+        run: rm -rf results.sqlite
+
+      - name: Download results
+        uses: actions/download-artifact@v4
+        with:
+          name: crawl-results
+      
+      - name: Commit and push
+        run: |
+          git config --global user.email "ci@graphflow.io"
+          git config --global user.name "Graphflow CI"
+          git add results.sqlite
+          git commit -m "Update crawl results"
+          git push
