@@ -1,4 +1,5 @@
 neo4j/neo4j
+neo4j/graph-data-science
 memgraph/memgraph
 vesoft-inc/nebula
 kuzudb/kuzu
