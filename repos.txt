@@ -13,6 +13,5 @@ neo4j-labs/llm-graph-builder
 apache/incubator-hugegraph
 RedisGraph/RedisGraph
 apache/tinkerpop
-surrealdb/surrealdb
 networkx/networkx
 topoteretes/cognee
